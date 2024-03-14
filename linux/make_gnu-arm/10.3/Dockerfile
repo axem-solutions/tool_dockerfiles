@@ -6,9 +6,9 @@ RUN apt update -y && \
                    bzip2
 
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 && \
-    tar -xjf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 && \
-    rm gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 && \
-    mv gcc-arm-none-eabi-10.3-2021.10 /opt/gcc-arm
+    mkdir -p /opt/gnu/arm-none-eabi-gnu-toolchain-10.3 && \
+    tar -xjf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 -C /opt/gnu/arm-none-eabi-gnu-toolchain-10.3 --strip-components=1 && \
+    rm gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 
 
 # Second stage: Copy the toolchain from the first stage
 FROM debian:bullseye
@@ -17,8 +17,8 @@ RUN apt update -y && \
     apt -y install gdb \
                    make
 
-COPY --from=builder /opt/gcc-arm /opt/gcc-arm
+COPY --from=builder /opt/gnu /opt/gnu
 
 WORKDIR /work
 
-ENV PATH="/opt/gcc-arm/bin:${PATH}"
+ENV PATH="/opt/gnu/arm-none-eabi-gnu-toolchain-10.3/bin:${PATH}"
