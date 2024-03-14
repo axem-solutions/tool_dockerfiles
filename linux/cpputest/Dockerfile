@@ -1,20 +1,21 @@
-FROM debian:latest
+FROM debian:bullseye
 
-RUN apt-get update
-RUN apt-get -y install 	gcc \
-			g++ \
-			cmake \
-			git \
-			libtool \
-			autoconf
+# Install the required packages.
+RUN apt update -y && \ 
+    apt -y install g++=4:10.2.1-1 \
+                   cmake=3.18.4-2+deb11u1 \
+                   libtool=2.4.6-15 \
+                   autoconf=2.69-14 \
+                   git=1:2.30.2-1+deb11u2
+
+RUN git clone https://github.com/cpputest/cpputest
 
 WORKDIR /cpputest
-RUN git clone https://github.com/cpputest/cpputest.git .
-RUN autoreconf . -i
-RUN ./configure
-RUN make tdd
+
+RUN autoreconf . -i && \
+    ./configure && \
+    make tdd
 
 ENV CPPUTEST_HOME=/cpputest
 
 WORKDIR /work
-
