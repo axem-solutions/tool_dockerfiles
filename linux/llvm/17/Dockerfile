@@ -1,30 +1,42 @@
-# Frist stage: Download the gpg keyring
-FROM debian:12 AS builder
-
-RUN apt update && \
-    apt install -y wget \
-                   gnupg
-
-RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /tmp/llvm-snapshot-keyring.gpg
-
-# Second stage: Install clang
+# First stage: Install LLVM
 FROM debian:12
 
 ARG CLANG_VERSION=17
 
-COPY --from=builder /tmp/llvm-snapshot-keyring.gpg /usr/share/keyrings/llvm-snapshot-keyring.gpg
-
+# Install necessary packages for installation
 RUN apt update && \
-    apt install -y ca-certificates
+    apt install -y wget \
+                   gnupg \
+                   ca-certificates \
+                   lsb-release \
+                   software-properties-common
 
-# Add the LLVM repository
-RUN VERSION_CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2) && \
-    echo "deb [signed-by=/usr/share/keyrings/llvm-snapshot-keyring.gpg] https://apt.llvm.org/${VERSION_CODENAME}/ llvm-toolchain-${VERSION_CODENAME}-${CLANG_VERSION} main" > /etc/apt/sources.list.d/llvm.list
+# Download and install LLVM
+RUN wget -q -P /tmp/ https://apt.llvm.org/llvm.sh && \
+    chmod +x /tmp/llvm.sh && \
+    /tmp/llvm.sh ${CLANG_VERSION} && \
+    rm /tmp/llvm.sh
 
+# Install additional dependencies required for LLVM and Clang
 RUN apt update && \
-    apt install -y clang-${CLANG_VERSION} \
-                   lldb-${CLANG_VERSION} \
-                   lld-${CLANG_VERSION} && \
-    rm -rf /var/lib/apt/lists/*
+    apt install -y libffi-dev \
+                   libxml2-dev \
+                   libtinfo-dev \
+                   zlib1g-dev \
+                   libedit-dev \
+                   libcurl4-openssl-dev
 
+# Clean up unnecessary files and packages
+RUN apt-get remove --purge -y wget \
+                              gnupg \
+                              lsb-release \
+                              software-properties-common && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Set environment variables
 ENV PATH="$PATH:/usr/lib/llvm-${CLANG_VERSION}/bin"
+ENV LD_LIBRARY_PATH="/usr/lib/llvm-${CLANG_VERSION}/lib:$LD_LIBRARY_PATH"
+ENV C_INCLUDE_PATH="/usr/include/llvm-${CLANG_VERSION}:$C_INCLUDE_PATH"
+ENV CPLUS_INCLUDE_PATH="/usr/include/llvm-${CLANG_VERSION}:$CPLUS_INCLUDE_PATH"
