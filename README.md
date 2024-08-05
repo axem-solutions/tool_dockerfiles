@@ -19,10 +19,10 @@ Welcome to **OTD** - an open and collaborative repo for storing and sharing Dock
 We welcome contributions from everyone. Here’s how you can get involved:
 
 1. **Fork the Repo**: Start by forking this repository.
-2. **Create a New Container file**: Create a Dockerfile for your tool, ensuring it meets our [guidelines](https://github.com/axem-solutions/.github/blob/main/CONTRIBUTING.md).
+2. **Create a New Container file**: Create a Dockerfile for your tool, ensuring it meets our [guidelines](https://github.com/axem-solutions/tool_dockerfiles/blob/main/.github/CONTRIBUTING.md).
 3. **Submit a Pull Request**: Once your file is ready, submit a pull request. Our team will review and merge it.
 
-> Before contributing please make sure to read our [guidelines]().
+> Before contributing please make sure to read our [guidelines](https://github.com/axem-solutions/tool_dockerfiles/blob/main/.github/CONTRIBUTING.md).
 
 ## 📚 Documentation
 
