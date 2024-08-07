@@ -43,14 +43,20 @@ to the official image.
 
 Some of the tools we know that are available as container images:
 
-- **Zephyr Project**
-[Docker Hub - zephyrprojectrtos/zephyr-build](https://hub.docker.com/r/zephyrprojectrtos/zephyr-build)
+- **Bats**
+[Docker Hub - bats/bats](https://hub.docker.com/r/bats/bats)
 
 - **Espressif ESP-IDF**
 [Docker Hub - espressif/idf](https://hub.docker.com/r/espressif/idf)
 
+- **Python**
+[Docker Hub - python](https://hub.docker.com/_/python)
+
+- **Rust**
+[Docker Hub - rust](https://hub.docker.com/_/rust)
+
 - **Yocto Project**
 [Docker Hub - crops/poky](https://hub.docker.com/r/yocto/yocto-docker)
 
-- ** Bats **
-[Docker Hub - bats/bats](https://hub.docker.com/r/bats/bats)
+- **Zephyr Project**
+[Docker Hub - zephyrprojectrtos/zephyr-build](https://hub.docker.com/r/zephyrprojectrtos/zephyr-build)
