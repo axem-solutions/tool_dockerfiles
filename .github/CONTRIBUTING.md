@@ -9,7 +9,7 @@ welcome.
 
 Reach out to us at 
 - [Discord](https://discord.com/invite/Nv6hSzXruK)
-- Send a DM on GitHub or an email to info@axemsoutions.io
+- Or send a DM on GitHub or an email to info@axemsoutions.io
 
 ## Creating a new issue
 
@@ -31,8 +31,9 @@ the XM [Discord](https://discord.com/invite/Nv6hSzXruK).
 4. Create a new feature branch for your modifications (you can name it as you 
 wish, but our best practice is to name it after the issue ID)
 5. Create the Dockerfile
-6. Create the documentation about how to build the image.
+6. Add the documentation to the same folder as the Dockerfile and name it as doc.md, use the 
+doc_template.md as template (located in the root of the repo)
 7. Open a PR from your fork to the upstream main and fill the PR template
-8. Fix the findings if there is any
+8. Wait for our feedback, and fix the findings if there is any
 9. The branch can be merged to the upstream main
 
