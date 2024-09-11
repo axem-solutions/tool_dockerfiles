@@ -1,6 +1,11 @@
 # First stage: Download and build IWYU
 FROM axemsolutions/llvm:17 AS builder
 
+# Use these arguments to control the number of processors used by the build.
+ARG SPARE_PROCESSORS=0
+RUN WORKER_PROCESSORS=$(($(nproc) - ${SPARE_PROCESSORS})) && \
+    echo "Number of worker processors: ${WORKER_PROCESSORS}"
+
 ARG IWYU_VERSION=0.21
 
 # Install dependencies for IWYU
@@ -13,7 +18,7 @@ RUN git clone --branch ${IWYU_VERSION} https://github.com/include-what-you-use/i
 	mkdir build && \
 	cd build && \
 	cmake -G "Unix Makefiles" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=/usr/lib/llvm-17 -DCMAKE_INSTALL_PREFIX=/usr .. && \
-	make && \
+	make -j$(WORKER_PROCESSORS) && \
 	make install
 
 # Second stage: Install clang and IWYU
