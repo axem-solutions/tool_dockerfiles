@@ -1,6 +1,11 @@
 # First stage: Download and build Mull
 FROM axemsolutions/llvm:17 AS builder
 
+# Use these arguments to control the number of processors used by the build.
+ARG SPARE_PROCESSORS=0
+RUN WORKER_PROCESSORS=$(($(nproc) - ${SPARE_PROCESSORS})) && \
+    echo "Number of worker processors: ${WORKER_PROCESSORS}"
+
 ARG MULL_VERSION=0.22.0
 
 # Install dependencies to build Mull
@@ -17,7 +22,7 @@ RUN cd /tmp/mull && \
 	mkdir build && \
 	cd build && \
 	cmake -G "Unix Makefiles" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=/usr/lib/llvm-17 -DCMAKE_INSTALL_PREFIX=/usr .. && \
-	make && \
+	make -j$(WORKER_PROCESSORS) && \
 	make install
 
 # List contents of /usr/include to verify installation
